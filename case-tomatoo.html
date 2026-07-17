@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tomatoo — Kaustubh Tiwari</title>
+<meta name="description" content="Your food tells a story, turning everyday orders into food worth sharing.">
+<meta property="og:title" content="Tomatoo — Kaustubh Tiwari">
+<meta property="og:description" content="Your food tells a story, turning everyday orders into food worth sharing.">
+<meta property="og:image" content="assets/tomatoo-01.webp">
+<link rel="icon" href="assets/avatar.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif&family=Geist:wght@400;500&family=Geist+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="nav">
+  <a class="pill" href="index.html">Home</a>
+  <a class="pill" href="work.html">Work</a>
+  <a class="pill" href="#contact">Contact</a>
+  <a class="pill" href="https://drive.google.com/file/d/1IlaySMHLkv5Y7w4LRYgcFy8eMSJbB-ok/view?usp=sharing" target="_blank" rel="noopener">Resume</a>
+</nav>
+
+<main class="col col--case">
+
+  <header class="masthead reveal">
+    <a class="back" href="work.html">&larr; Back</a>
+    <h1 class="case-title">Tomatoo</h1>
+    <div class="meta">
+      <div class="meta-col meta-col--overview">
+        <div class="meta-label">Overview</div>
+        <p class="meta-value">Your food tells a story, turning everyday orders into food worth sharing.</p>
+      </div>
+      <div class="meta-col meta-col--year">
+        <div class="meta-label">Year</div>
+        <p class="meta-value">2026</p>
+      </div>
+    </div>
+  </header>
+
+  <figure class="plate reveal"><img src="assets/tomatoo-01.webp" alt="Tomatoo" width="2320" height="1108"></figure>
+
+  <section class="case-section reveal">
+    <h2 class="case-head">The Problem</h2>
+    <div class="prose">
+      <p>Food is one of the most social things in a person&rsquo;s life, yet food delivery is one of the least social products they use. There was nowhere for your real orders to become something worth sharing.</p>
+      <p>People order food several times a week, but the moment it arrives the experience disappears, no memory, no sharing, no sense of taste identity. The discovery that does happen (what to eat, where to order) lives on Instagram and word of mouth, disconnected from the ordering data that could power it.</p>
+    </div>
+  </section>
+
+  <figure class="plate reveal"><img src="assets/tomatoo-02.webp" alt="" width="2320" height="1108" loading="lazy"></figure>
+
+  <section class="case-section reveal">
+    <h2 class="case-head">Context &amp; Constraints</h2>
+    <div class="prose">
+      <p><strong>Business Goals:</strong></p>
+      <p>Build an engagement/retention layer on existing delivery behaviour, not a new delivery app.</p>
+      <p>Grow through sharing (food stories) and community, not ad spend.</p>
+      <p><strong>User Needs:</strong></p>
+      <p>Remember and show off meals, discover food through people they trust, find their taste tribe, and feel rewarded for what they already do.</p>
+      <p><strong>Technical &amp; platform constraints:</strong></p>
+      <p>Mobile first, iOS native form factor (402&times;874 iPhone frames).</p>
+      <p>No delivery infrastructure of our own, everything hangs off third party order import (Swiggy, Zomato, later Toing) plus Google sign in. Orders are the source of truth that powers stories, spend totals and the leaderboard.</p>
+      <p>No published design library, the system was built locally from scratch (one variable collection, local text styles, Vuesax icons, iOS 18 chrome).</p>
+      <p>India first legal context (DPDP Act 2023) shaped the privacy, consent and data retention surfaces.</p>
+    </div>
+  </section>
+
+  <figure class="plate reveal"><img src="assets/tomatoo-03.webp" alt="" width="2320" height="1108" loading="lazy"></figure>
+
+  <section class="case-section reveal">
+    <h2 class="case-head">Role &amp; Ownership</h2>
+    <div class="prose">
+      <p>This was a real client engagement for an early stage startup, and I was the sole designer on it. I owned the product design from thesis to handoff: the local design system (tokens, type ramp, component recipes), every screen across onboarding, home feed, stories and reels, orders, leaderboard, communities and settings, the full error and empty state layer, and the interactive prototype flows in Figma.</p>
+      <p>I also ran the client relationship myself, gathering the brief, presenting the work, and turning their feedback into design decisions. A senior designer supervised and cleared my doubts, but the thesis, the system, the screens and the client conversations were mine.</p>
+    </div>
+  </section>
+
+  <figure class="plate reveal"><img src="assets/tomatoo-04.webp" alt="" width="2320" height="1108" loading="lazy"></figure>
+
+  <section class="case-section reveal">
+    <h2 class="case-head">Depth of Craft</h2>
+    <div class="prose">
+      <p>Systemic error language: three consistent inline signals (red stroke + red helper text + disabled CTA), a snackbar recipe for overlays, and a mascot full screen pattern for connectivity/empty, applied uniformly, not guessed per screen.</p>
+      <p>Edge cases as first class: OTP expired (neutral boxes, 00:00 timer) vs incorrect OTP (red boxes); city picker &ldquo;no results&rdquo; vs unsupported city; banner size/format limits; a tag counter that turns red at 6/6.</p>
+      <p>Microcopy tuned to each case: every state says what went wrong and what to do next, from &ldquo;Code expired. Request a new one.&rdquo; to &ldquo;Incorrect code. Please try again.&rdquo;, never a generic &ldquo;Something went wrong.&rdquo;</p>
+      <p>Systems thinking: tokenised colour/type/spacing, reusable row/card/snackbar recipes, and a responsive rule that nests (FILL row &rarr; FILL text + FIXED avatar).</p>
+      <p>Content realism: real, face cropped portraits for avatars, platform badges on order/reel cards, and spend totals that tie the whole loop back to real order data.</p>
+    </div>
+  </section>
+
+  <figure class="plate reveal"><img src="assets/tomatoo-05.webp" alt="" width="2320" height="1108" loading="lazy"></figure>
+
+  <section class="case-section reveal">
+    <h2 class="case-head">Process</h2>
+    <div class="prose">
+      <p>Worked directly with the client in feedback rounds, presenting iterations and turning their input into concrete design decisions rather than guessing.</p>
+      <p>Started from the product thesis and the &ldquo;food story&rdquo; metaphor, then mapped the five pillars, feed, stories/reels, orders, gamification, communities, into an 200+ screen flow.</p>
+      <p>Built the design system alongside the screens, harvesting tokens from real screens rather than designing them in the abstract.</p>
+      <p>Happy path first, then went deep on the unglamorous states: 40+ error and empty states, one screen per distinct validation case (username too short vs too long vs invalid vs taken are four separate screens, not one).</p>
+    </div>
+  </section>
+
+  <figure class="plate reveal"><img src="assets/tomatoo-06.webp" alt="" width="2320" height="1108" loading="lazy"></figure>
+
+  <section class="case-section reveal">
+    <h2 class="case-head">Decisions &amp; Tradeoffs</h2>
+    <div class="prose">
+      <p>One screen per validation case rather than one screen with every possible message, so username too short, too long, invalid and taken are four separate frames. <strong>Trade off:</strong> forty plus states to build and maintain, in exchange for a handoff where every edge case is drawn, not left for a developer to guess.</p>
+      <p>Error feedback chosen by context instead of one blanket rule, inline helper text on dense forms, a floating banner or snackbar only over full bleed photos where inline text cannot be read. <strong>Trade off:</strong> less pattern uniformity across the app, in exchange for an error that stays legible wherever it appears.</p>
+      <p>Anton for display and Plus Jakarta Sans for everything else, with a single red as the only accent. <strong>Trade off:</strong> Anton uppercase is loud and harder to read in long runs, so it is confined to titles and the wordmark, and red is rationed so it keeps its meaning.</p>
+      <p>An off white canvas with light grey cards instead of pure white. <strong>Trade off:</strong> lower raw contrast than white, in exchange for a softer, more editorial surface that lets the food photography and the red accent carry the energy.</p>
+    </div>
+  </section>
+
+  <figure class="plate reveal"><img src="assets/tomatoo-07.webp" alt="" width="2320" height="1108" loading="lazy"></figure>
+
+  <section class="case-section reveal">
+    <h2 class="case-head">Impact</h2>
+    <div class="prose">
+      <p><strong>Outcomes so far:</strong></p>
+      <p>The client reviewed and approved the design direction.</p>
+      <p>Their feedback was gathered across several rounds and incorporated into the work.</p>
+      <p>The design has been handed over to the development team and is now being built.</p>
+      <p>The client&rsquo;s next step is to grow Tomatoo into a paid health consultation service, offering personalised diet plans on top of the social and ordering layer.</p>
+      <p><strong>What I delivered:</strong></p>
+      <p>A complete, coherent product: 200+ core screens + 40+ error/empty states + full settings, legal and onboarding flows, all on one design system.</p>
+      <p>A responsive system verified to reflow cleanly at 2&times;+ the base width.</p>
+      <p>Wired, clickable prototype flows, follow requests, settings navigation, order scan loading, and the marketing mockups.</p>
+      <p><strong>How success would be measured:</strong></p>
+      <p>Activation: % of users completing order account connection during onboarding.</p>
+      <p>Engagement: stories posted per user per week; DAU/WAU stickiness.</p>
+      <p>Social: follow + community join rate; leaderboard participation.</p>
+      <p>Retention: D7 / D30.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer" id="contact">
+  <div class="contact">
+    <h2>Let&rsquo;s discuss and kickstart your first project together.</h2>
+
+    <form class="form" action="https://formspree.io/f/xeeyaeny" method="POST">
+      <input type="email" name="email" placeholder="Email" required aria-label="Email">
+      <textarea name="message" placeholder="Message" required aria-label="Message"></textarea>
+      <button class="send" type="submit">Send</button>
+    </form>
+
+    <div class="or">
+      <span>or reach out to me at</span>
+      <a href="mailto:kaustubhgaurav22@gmail.com">kaustubhgaurav22@gmail.com</a>
+    </div>
+
+    <div class="socials">
+      <a href="https://www.linkedin.com/in/kaustubh-gaurav-tiwari/" aria-label="LinkedIn" target="_blank" rel="noopener">
+        <img src="assets/linkedin.png" alt="" width="32" height="32">
+      </a>
+      <a href="https://www.instagram.com/kaustubh_gaurav22/" aria-label="Instagram" target="_blank" rel="noopener">
+        <img src="assets/instagram.png" alt="" width="32" height="32">
+      </a>
+      <a href="https://www.behance.net/kaustubhgaurav1" aria-label="Behance" target="_blank" rel="noopener">
+        <img src="assets/behance.png" alt="" width="32" height="22">
+      </a>
+    </div>
+  </div>
+
+  <div class="wordmark">
+    <p class="mark">Kaustubh Tiwari</p>
+    <p class="copy">&copy; 2026 Kaustubh.</p>
+  </div>
+</footer>
+
+<script src="reveal.js" defer></script>
+</body>
+</html>
