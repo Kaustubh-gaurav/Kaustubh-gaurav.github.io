@@ -55,16 +55,22 @@
   <section class="case-section reveal">
     <h2 class="case-head">Context &amp; Constraints</h2>
     <div class="prose">
-      <p><strong>Business Goals:</strong></p>
-      <p>Build an engagement/retention layer on existing delivery behaviour, not a new delivery app.</p>
-      <p>Grow through sharing (food stories) and community, not ad spend.</p>
-      <p><strong>User Needs:</strong></p>
-      <p>Remember and show off meals, discover food through people they trust, find their taste tribe, and feel rewarded for what they already do.</p>
-      <p><strong>Technical &amp; platform constraints:</strong></p>
-      <p>Mobile first, iOS native form factor (402&times;874 iPhone frames).</p>
-      <p>No delivery infrastructure of our own, everything hangs off third party order import (Swiggy, Zomato, later Toing) plus Google sign in. Orders are the source of truth that powers stories, spend totals and the leaderboard.</p>
-      <p>No published design library, the system was built locally from scratch (one variable collection, local text styles, Vuesax icons, iOS 18 chrome).</p>
-      <p>India first legal context (DPDP Act 2023) shaped the privacy, consent and data retention surfaces.</p>
+      <p class="prose-label"><strong>Business Goals:</strong></p>
+      <ul>
+        <li>Build an engagement/retention layer on existing delivery behaviour, not a new delivery app.</li>
+        <li>Grow through sharing (food stories) and community, not ad spend.</li>
+      </ul>
+      <p class="prose-label"><strong>User Needs:</strong></p>
+      <ul>
+        <li>Remember and show off meals, discover food through people they trust, find their taste tribe, and feel rewarded for what they already do.</li>
+      </ul>
+      <p class="prose-label"><strong>Technical &amp; platform constraints:</strong></p>
+      <ul>
+        <li>Mobile first, iOS native form factor (402×874 iPhone frames).</li>
+        <li>No delivery infrastructure of our own, everything hangs off third party order import (Swiggy, Zomato, later Toing) plus Google sign in. Orders are the source of truth that powers stories, spend totals and the leaderboard.</li>
+        <li>No published design library, the system was built locally from scratch (one variable collection, local text styles, Vuesax icons, iOS 18 chrome).</li>
+        <li>India first legal context (DPDP Act 2023) shaped the privacy, consent and data retention surfaces.</li>
+      </ul>
     </div>
   </section>
 
@@ -83,11 +89,13 @@
   <section class="case-section reveal">
     <h2 class="case-head">Depth of Craft</h2>
     <div class="prose">
-      <p>Systemic error language: three consistent inline signals (red stroke + red helper text + disabled CTA), a snackbar recipe for overlays, and a mascot full screen pattern for connectivity/empty, applied uniformly, not guessed per screen.</p>
-      <p>Edge cases as first class: OTP expired (neutral boxes, 00:00 timer) vs incorrect OTP (red boxes); city picker &ldquo;no results&rdquo; vs unsupported city; banner size/format limits; a tag counter that turns red at 6/6.</p>
-      <p>Microcopy tuned to each case: every state says what went wrong and what to do next, from &ldquo;Code expired. Request a new one.&rdquo; to &ldquo;Incorrect code. Please try again.&rdquo;, never a generic &ldquo;Something went wrong.&rdquo;</p>
-      <p>Systems thinking: tokenised colour/type/spacing, reusable row/card/snackbar recipes, and a responsive rule that nests (FILL row &rarr; FILL text + FIXED avatar).</p>
-      <p>Content realism: real, face cropped portraits for avatars, platform badges on order/reel cards, and spend totals that tie the whole loop back to real order data.</p>
+      <ul>
+        <li>Systemic error language: three consistent inline signals (red stroke + red helper text + disabled CTA), a snackbar recipe for overlays, and a mascot full screen pattern for connectivity/empty, applied uniformly, not guessed per screen.</li>
+        <li>Edge cases as first class: OTP expired (neutral boxes, 00:00 timer) vs incorrect OTP (red boxes); city picker “no results” vs unsupported city; banner size/format limits; a tag counter that turns red at 6/6.</li>
+        <li>Microcopy tuned to each case: every state says what went wrong and what to do next, from “Code expired. Request a new one.” to “Incorrect code. Please try again.”, never a generic “Something went wrong.”</li>
+        <li>Systems thinking: tokenised colour/type/spacing, reusable row/card/snackbar recipes, and a responsive rule that nests (FILL row → FILL text + FIXED avatar).</li>
+        <li>Content realism: real, face cropped portraits for avatars, platform badges on order/reel cards, and spend totals that tie the whole loop back to real order data.</li>
+      </ul>
     </div>
   </section>
 
@@ -96,10 +104,12 @@
   <section class="case-section reveal">
     <h2 class="case-head">Process</h2>
     <div class="prose">
-      <p>Worked directly with the client in feedback rounds, presenting iterations and turning their input into concrete design decisions rather than guessing.</p>
-      <p>Started from the product thesis and the &ldquo;food story&rdquo; metaphor, then mapped the five pillars, feed, stories/reels, orders, gamification, communities, into an 200+ screen flow.</p>
-      <p>Built the design system alongside the screens, harvesting tokens from real screens rather than designing them in the abstract.</p>
-      <p>Happy path first, then went deep on the unglamorous states: 40+ error and empty states, one screen per distinct validation case (username too short vs too long vs invalid vs taken are four separate screens, not one).</p>
+      <ul>
+        <li>Worked directly with the client in feedback rounds, presenting iterations and turning their input into concrete design decisions rather than guessing.</li>
+        <li>Started from the product thesis and the “food story” metaphor, then mapped the five pillars, feed, stories/reels, orders, gamification, communities, into an 200+ screen flow.</li>
+        <li>Built the design system alongside the screens, harvesting tokens from real screens rather than designing them in the abstract.</li>
+        <li>Happy path first, then went deep on the unglamorous states: 40+ error and empty states, one screen per distinct validation case (username too short vs too long vs invalid vs taken are four separate screens, not one).</li>
+      </ul>
     </div>
   </section>
 
@@ -108,10 +118,12 @@
   <section class="case-section reveal">
     <h2 class="case-head">Decisions &amp; Tradeoffs</h2>
     <div class="prose">
-      <p>One screen per validation case rather than one screen with every possible message, so username too short, too long, invalid and taken are four separate frames. <strong>Trade off:</strong> forty plus states to build and maintain, in exchange for a handoff where every edge case is drawn, not left for a developer to guess.</p>
-      <p>Error feedback chosen by context instead of one blanket rule, inline helper text on dense forms, a floating banner or snackbar only over full bleed photos where inline text cannot be read. <strong>Trade off:</strong> less pattern uniformity across the app, in exchange for an error that stays legible wherever it appears.</p>
-      <p>Anton for display and Plus Jakarta Sans for everything else, with a single red as the only accent. <strong>Trade off:</strong> Anton uppercase is loud and harder to read in long runs, so it is confined to titles and the wordmark, and red is rationed so it keeps its meaning.</p>
-      <p>An off white canvas with light grey cards instead of pure white. <strong>Trade off:</strong> lower raw contrast than white, in exchange for a softer, more editorial surface that lets the food photography and the red accent carry the energy.</p>
+      <ul>
+        <li>One screen per validation case rather than one screen with every possible message, so username too short, too long, invalid and taken are four separate frames. <strong>Trade off:</strong> forty plus states to build and maintain, in exchange for a handoff where every edge case is drawn, not left for a developer to guess.</li>
+        <li>Error feedback chosen by context instead of one blanket rule, inline helper text on dense forms, a floating banner or snackbar only over full bleed photos where inline text cannot be read. <strong>Trade off:</strong> less pattern uniformity across the app, in exchange for an error that stays legible wherever it appears.</li>
+        <li>Anton for display and Plus Jakarta Sans for everything else, with a single red as the only accent. <strong>Trade off:</strong> Anton uppercase is loud and harder to read in long runs, so it is confined to titles and the wordmark, and red is rationed so it keeps its meaning.</li>
+        <li>An off white canvas with light grey cards instead of pure white. <strong>Trade off:</strong> lower raw contrast than white, in exchange for a softer, more editorial surface that lets the food photography and the red accent carry the energy.</li>
+      </ul>
     </div>
   </section>
 
@@ -120,20 +132,26 @@
   <section class="case-section reveal">
     <h2 class="case-head">Impact</h2>
     <div class="prose">
-      <p><strong>Outcomes so far:</strong></p>
-      <p>The client reviewed and approved the design direction.</p>
-      <p>Their feedback was gathered across several rounds and incorporated into the work.</p>
-      <p>The design has been handed over to the development team and is now being built.</p>
-      <p>The client&rsquo;s next step is to grow Tomatoo into a paid health consultation service, offering personalised diet plans on top of the social and ordering layer.</p>
-      <p><strong>What I delivered:</strong></p>
-      <p>A complete, coherent product: 200+ core screens + 40+ error/empty states + full settings, legal and onboarding flows, all on one design system.</p>
-      <p>A responsive system verified to reflow cleanly at 2&times;+ the base width.</p>
-      <p>Wired, clickable prototype flows, follow requests, settings navigation, order scan loading, and the marketing mockups.</p>
-      <p><strong>How success would be measured:</strong></p>
-      <p>Activation: % of users completing order account connection during onboarding.</p>
-      <p>Engagement: stories posted per user per week; DAU/WAU stickiness.</p>
-      <p>Social: follow + community join rate; leaderboard participation.</p>
-      <p>Retention: D7 / D30.</p>
+      <p class="prose-label"><strong>Outcomes so far:</strong></p>
+      <ul>
+        <li>The client reviewed and approved the design direction.</li>
+        <li>Their feedback was gathered across several rounds and incorporated into the work.</li>
+        <li>The design has been handed over to the development team and is now being built.</li>
+        <li>The client’s next step is to grow Tomatoo into a paid health consultation service, offering personalised diet plans on top of the social and ordering layer.</li>
+      </ul>
+      <p class="prose-label"><strong>What I delivered:</strong></p>
+      <ul>
+        <li>A complete, coherent product: 200+ core screens + 40+ error/empty states + full settings, legal and onboarding flows, all on one design system.</li>
+        <li>A responsive system verified to reflow cleanly at 2×+ the base width.</li>
+        <li>Wired, clickable prototype flows, follow requests, settings navigation, order scan loading, and the marketing mockups.</li>
+      </ul>
+      <p class="prose-label"><strong>How success would be measured:</strong></p>
+      <ul>
+        <li>Activation: % of users completing order account connection during onboarding.</li>
+        <li>Engagement: stories posted per user per week; DAU/WAU stickiness.</li>
+        <li>Social: follow + community join rate; leaderboard participation.</li>
+        <li>Retention: D7 / D30.</li>
+      </ul>
     </div>
   </section>
 

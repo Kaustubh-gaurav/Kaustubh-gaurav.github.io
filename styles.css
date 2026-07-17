@@ -174,6 +174,10 @@ a { color: inherit; }
 .prose { flex: 1; display: flex; flex-direction: column; gap: 24px; }
 .prose p { margin: 0; font-size: 20px; line-height: 24px; color: var(--grey); }
 .prose strong { font-weight: 700; }
+.prose ul { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 12px; }
+.prose li { font-size: 20px; line-height: 24px; color: var(--grey); }
+/* a label heading sits tight to the list it introduces */
+.prose-label + ul { margin-top: -12px; }
 
 /* ---------- reveal on scroll ---------- */
 .reveal {
@@ -210,7 +214,7 @@ a { color: inherit; }
 
 /* ---------- most replayed ---------- */
 .replayed { display: flex; flex-direction: column; gap: 28px; }
-.replayed-label { font-size: 15px; line-height: 18px; padding: 6px 0 6px 6px; }
+.replayed-label { font-size: 15px; line-height: 18px; padding: 6px 0 6px 6px; color: var(--grey); }
 /* Spotify compact embed — 80px is the short player, matching the reference's 81px bar */
 .track {
   display: block;
@@ -344,7 +348,9 @@ a { color: inherit; }
   .case-section { flex-direction: column; gap: 16px; }
   .case-head { width: auto; }
   .prose { gap: 16px; }
-  .prose p { font-size: 16px; line-height: 19.2px; }
+  .prose p, .prose li { font-size: 16px; line-height: 19.2px; }
+  .prose ul { gap: 10px; }
+  .prose-label + ul { margin-top: -6px; }
   .back { font-size: 16px; }
 
   .lead { font-size: 12px; line-height: 15px; }
