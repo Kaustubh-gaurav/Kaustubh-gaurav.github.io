@@ -157,7 +157,7 @@ a { color: inherit; }
 .meta { display: flex; gap: 0; }
 .meta-col { display: flex; flex-direction: column; gap: 11px; }
 .meta-col--overview { width: 528px; flex: none; }
-.meta-col--year { width: 75px; flex: none; margin-left: 1057px; }
+.meta-col--year { width: 75px; flex: none; margin-left: auto; }
 .meta-label { font-size: 16px; line-height: 19px; }
 .meta-value { margin: 0; font-size: 20px; line-height: 24px; }
 
