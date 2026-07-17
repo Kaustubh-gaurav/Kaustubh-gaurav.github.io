@@ -8,7 +8,7 @@
   --grey: #7e7e7e;
   --border: #e7eaee;
   --col: 640px;
-  --media-radius: 8px;
+  --media-radius: 24px; /* matches the card image radius in the Figma file */
 }
 
 *, *::before, *::after { box-sizing: border-box; }
