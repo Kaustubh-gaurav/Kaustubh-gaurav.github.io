@@ -8,6 +8,7 @@
   --grey: #7e7e7e;
   --border: #e7eaee;
   --col: 640px;
+  --media-radius: 8px;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -97,8 +98,23 @@ a { color: inherit; }
   text-decoration: none;
   border-radius: 8px;
 }
-.card-media { position: relative; border-radius: 4px; overflow: hidden; background: var(--pill); }
-.card-media img { width: 100%; height: auto; aspect-ratio: 608 / 468; object-fit: cover; }
+.card-media {
+  position: relative;
+  border-radius: var(--media-radius);
+  overflow: hidden;
+  background: var(--pill);
+  line-height: 0;
+}
+/* The radius goes on the image too, not just the wrapper: an inline img sits on
+   the text baseline, so the wrapper grows a few px taller than the image and its
+   rounded corners end up below the image's own square ones. */
+.card-media img {
+  display: block;
+  width: 100%; height: auto;
+  aspect-ratio: 608 / 468;
+  object-fit: cover;
+  border-radius: var(--media-radius);
+}
 .tag {
   position: absolute; top: 16px; left: 16px;
   padding: 10px 14px;
@@ -123,7 +139,7 @@ a { color: inherit; }
   margin: 0;
 }
 .card--bordered { border: 1px solid var(--border); }
-.card-media--bordered { border: 1px solid var(--border); border-radius: 6px; }
+.card-media--bordered { border: 1px solid var(--border); }
 
 /* ---------- case study ---------- */
 /* column widens from 640 to 1160 on case study pages */
@@ -156,7 +172,7 @@ a { color: inherit; }
   font-weight: 500; font-size: 18px; line-height: 22px;
 }
 .prose { flex: 1; display: flex; flex-direction: column; gap: 24px; }
-.prose p { margin: 0; font-size: 20px; line-height: 24px; }
+.prose p { margin: 0; font-size: 20px; line-height: 24px; color: var(--grey); }
 .prose strong { font-weight: 700; }
 
 /* ---------- reveal on scroll ---------- */
@@ -276,11 +292,12 @@ a { color: inherit; }
 .or span { opacity: 0.7; }
 .socials { display: flex; align-items: center; gap: 15px; }
 .socials a {
-  width: 32px; height: 32px;
+  height: 32px;
   display: grid; place-items: center;
   transition: opacity 120ms ease;
 }
-.socials img { width: 32px; height: 32px; object-fit: contain; }
+/* inline SVG so the glyphs sit on the blue with no background box */
+.socials svg { height: 32px; width: auto; fill: #fff; display: block; }
 .socials a:hover, .socials a:focus-visible { opacity: 0.7; }
 
 .wordmark { width: 100%; padding-top: 60px; text-align: center; }
