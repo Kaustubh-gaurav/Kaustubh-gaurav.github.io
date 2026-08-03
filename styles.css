@@ -1,14 +1,16 @@
 /* Kaustubh Tiwari — portfolio
-   Column is a fixed 640 on desktop and laptop; mobile reflows at 640px viewport. */
+   The page is a stack of full width sheets that pin and cover each other.
+   Content sits in a 747 column on desktop and reflows below 680. */
 
 :root {
   --blue: #002bba;
   --bg: #fbfbfb;
   --pill: #eef0f3;
   --grey: #7e7e7e;
+  --muted: #6b7280; /* nav item at rest */
+  --ink: #0f0f0f;   /* nav item on hover */
   --border: #e7eaee;
-  --col: 640px;
-  --media-radius: 24px; /* matches the card image radius in the Figma file */
+  --col: 747px;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -27,33 +29,62 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* the hero paper band runs the full viewport width, wider than its container */
+body { overflow-x: clip; }
+
 img { display: block; max-width: 100%; }
 a { color: inherit; }
 
+/* in the accessibility tree, out of the visual layout */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ---------- nav ---------- */
+/* One grey tray holding all four items, rather than four separate pills. */
 .nav {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 54px;
   height: 74px;
   padding: 0 16px;
+  background: rgb(251 251 251 / 0.88);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.pills {
+  display: flex;
+  align-items: center;
   flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  border-radius: 8px;
+  background: var(--pill);
 }
 .pill {
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: var(--pill);
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: var(--muted);
   font-size: 18px;
   line-height: 21.6px;
   text-decoration: none;
-  transition: background 120ms ease, color 120ms ease;
+  transition: color 120ms ease;
 }
-.pill:hover, .pill:focus-visible { background: var(--blue); color: #fff; }
+.pill:hover, .pill:focus-visible { color: var(--ink); }
+.pill[aria-current="page"] { color: var(--blue); }
 
 /* ---------- column ---------- */
+/* 747 on desktop, but it has to give way to a 32px gutter before the viewport
+   gets narrower than the column itself, or the page scrolls sideways between
+   the column width and the 680 mobile breakpoint. */
 .col {
-  width: var(--col);
+  width: min(var(--col), calc(100% - 64px));
   margin: 0 auto;
   padding: 32px 0 96px;
   display: flex;
@@ -61,19 +92,37 @@ a { color: inherit; }
   gap: 56px;
 }
 
-/* ---------- hero ---------- */
-.hero { display: flex; flex-direction: column; gap: 16px; }
-.avatar-row { display: flex; align-items: flex-end; gap: 12px; }
-.avatar-wrap { position: relative; width: 85px; height: 85px; flex: none; }
-.avatar { width: 85px; height: 85px; border-radius: 10px; object-fit: cover; }
-.status-dot {
-  position: absolute; right: 0; bottom: 0;
-  width: 10px; height: 10px; border-radius: 50%;
-  background: var(--blue); border: 2px solid var(--bg);
+/* ---------- stacked sheets ---------- */
+/* Each section is a full width opaque panel that pins, then gets covered by the
+   next one climbing over it. Panels paint in document order, so a later sheet
+   covers an earlier one without any z-index bookkeeping.
+
+   No sticky offset is set here on purpose. Sticky with no offset never sticks,
+   so without JavaScript this is an ordinary scrolling page. stack.js measures
+   each panel and sets the offset, because the value depends on whether the panel
+   is taller than the screen. See the note in that file. */
+.panel {
+  position: sticky;
+  display: flex;
+  justify-content: center;
 }
-.name { font-size: 16px; line-height: 24px; margin: 0; font-weight: 500; }
-.tagline { display: flex; flex-direction: column; gap: 19px; width: 608px; max-width: 100%; }
-.tagline p { margin: 0; font-size: 24px; line-height: 28.8px; }
+.panel .col { padding-block: 64px; }
+
+.panel--hero { background: url("assets/paper-texture.webp") center / cover no-repeat; }
+.panel--hero .col { padding-block: 32px 96px; }
+/* the two sections are spaced differently in the design, so they are set per panel */
+.panel--work .section { gap: 80px; }
+.panel--about .section { gap: 56px; }
+.panel--work { background: url("assets/sky-panel.webp") center / cover no-repeat; }
+.panel--about { background: #e7e7e9; }
+.panel--footer { background: var(--blue); }
+
+/* Nothing comes over the footer, so it never pins. It still has to be positioned:
+   static content paints underneath positioned siblings, so a static footer would
+   slide behind the pinned About panel instead of over it. */
+.panel--footer { position: relative; }
+
+.postcard { width: 100%; height: auto; }
 
 /* ---------- section header: rule + diamond + serif label ---------- */
 .section { display: flex; flex-direction: column; gap: 24px; }
@@ -88,58 +137,136 @@ a { color: inherit; }
   margin: 0;
 }
 
-/* ---------- work cards ---------- */
-.work-list { display: flex; flex-direction: column; gap: 16px; }
-.card {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 16px;
-  text-decoration: none;
-  border-radius: 8px;
-}
-.card-media {
-  position: relative;
-  border-radius: var(--media-radius);
-  overflow: hidden;
-  background: var(--pill);
-  line-height: 0;
-}
-/* The radius goes on the image too, not just the wrapper: an inline img sits on
-   the text baseline, so the wrapper grows a few px taller than the image and its
-   rounded corners end up below the image's own square ones. */
-.card-media img {
-  display: block;
-  width: 100%; height: auto;
-  aspect-ratio: 608 / 468;
-  object-fit: cover;
-  border-radius: var(--media-radius);
-}
-.tag {
-  position: absolute; top: 16px; left: 16px;
-  padding: 10px 14px;
-  border-radius: 6px;
-  background: rgb(0 43 186 / 0.22);
-  color: #fff;
-  font-size: 20px;
-  line-height: 24px;
-  backdrop-filter: blur(2px);
-}
-.caption { display: flex; align-items: center; gap: 6px; font-size: 20px; line-height: 24px; }
-.caption .dia { font-size: 14px; line-height: 20px; }
+/* ---------- work: boarding pass cards ---------- */
+/* The ticket silhouette, notches and all, is an SVG used as a mask, so the card's
+   background colour shows through it. That is what lets hover repaint the whole
+   shape rather than needing a second image.
 
-/* ---------- work page ---------- */
-/* same card geometry as the home page, plus borders on the card and the image well */
-.col--work { gap: 88px; padding-top: 32px; }
-.page-title {
-  font-family: "Instrument Serif", Georgia, serif;
-  font-weight: 400;
-  font-size: 126px;
-  line-height: 1;
-  margin: 0;
+   Everything inside is positioned in the design's own pixels. --u is one design
+   pixel expressed in container query units, so the entire card scales as one
+   piece when the column is narrower than the width it was drawn at, instead of
+   the text staying put while the layout shrinks under it. */
+.work-list { display: flex; flex-direction: column; gap: 64px; }
+
+.ticket {
+  display: block;
+  text-decoration: none;
+  /* on the wrapper, not the masked face: filter would otherwise run before the
+     mask and cast a rectangular shadow around a notched card */
+  filter: drop-shadow(0 4px 10px rgb(0 0 0 / 0.25));
 }
-.card--bordered { border: 1px solid var(--border); }
-.card-media--bordered { border: 1px solid var(--border); }
+.ticket-face {
+  position: relative;
+  container-type: inline-size;
+  aspect-ratio: 747 / 322;
+  background: var(--ticket-bg);
+  -webkit-mask: url("assets/work/ticket-desktop.svg") no-repeat top left / 100% 100%;
+  mask: url("assets/work/ticket-desktop.svg") no-repeat top left / 100% 100%;
+  --ticket-bg: #f7f7f7;
+  --ticket-ink: #0f0f0f;
+  --ticket-title: var(--blue);
+  --ticket-kind: var(--muted);
+}
+/* A custom property does not interpolate, so changing --ticket-ink alone would
+   snap. Each property that reads one carries its own transition instead, and
+   they all run on the same curve so the stub and its contents turn together. */
+.ticket-face,
+.ticket-route, .ticket-title, .ticket-kind, .ticket-year,
+.ticket-barcode, .ticket-rule, .ticket-plane {
+  transition: background-color 260ms ease, color 260ms ease;
+}
+.ticket:hover .ticket-face,
+.ticket:focus-visible .ticket-face {
+  --ticket-bg: var(--blue);
+  --ticket-ink: #f7f7f7;
+  --ticket-title: #f7f7f7;
+  --ticket-kind: #aaaeb6;
+}
+.ticket-inner {
+  position: absolute;
+  inset: 0;
+  --u: calc(100cqw / 747);
+}
+.ticket-inner > * { position: absolute; margin: 0; }
+
+/* desktop: the artwork is a shaped stub down the left edge */
+.ticket-shot { left: 0; top: 0; width: calc(257 * var(--u)); height: 100%; }
+.ticket-shot img { width: 100%; height: 100%; object-fit: cover; }
+
+.ticket-route {
+  left: calc(273 * var(--u));
+  right: calc(16 * var(--u));
+  top: calc(16 * var(--u));
+  display: flex;
+  align-items: center;
+  gap: calc(8 * var(--u));
+  font-size: calc(32 * var(--u));
+  line-height: 1.2;
+  color: var(--ticket-ink);
+}
+.ticket-rule { flex: 1; height: 1px; background: currentColor; }
+
+.ticket-title {
+  left: calc(273 * var(--u));
+  top: calc(71 * var(--u));
+  font-size: calc(48 * var(--u));
+  line-height: 1.21;
+  color: var(--ticket-title);
+}
+.ticket-kind {
+  left: calc(273 * var(--u));
+  top: calc(133 * var(--u));
+  font-weight: 400;
+  font-size: calc(24 * var(--u));
+  line-height: 1.21;
+  color: var(--ticket-kind);
+}
+.ticket-kind-year { display: none; } /* desktop splits the year onto its own line */
+.ticket-year {
+  left: calc(273 * var(--u));
+  top: calc(287 * var(--u));
+  font-size: calc(16 * var(--u));
+  line-height: 1.2;
+  color: var(--ticket-ink);
+}
+
+/* mascots overflow the card and are clipped by the mask, as drawn */
+.ticket-mascot { transform-origin: center; }
+.ticket-mascot--tomatoo  { left: calc(428.4 * var(--u)); top: calc(94 * var(--u));    width: calc(267 * var(--u)); transform: rotate(5.24deg); }
+.ticket-mascot--jopana   { left: calc(436.4 * var(--u)); top: calc(117 * var(--u));   width: calc(301.4 * var(--u)); transform: rotate(6.92deg); }
+.ticket-mascot--linktalk { left: calc(402 * var(--u));   top: calc(66 * var(--u));    width: calc(284 * var(--u)); }
+
+.ticket-barcode {
+  left: calc(715 * var(--u));
+  top: calc(166 * var(--u));
+  transform: translate(-50%, -50%) rotate(90deg);
+  font-family: "Libre Barcode 39 Extended", "Geist Mono", monospace;
+  font-size: calc(32 * var(--u));
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--ticket-ink);
+}
+.ticket-plane {
+  left: calc(731.25 * var(--u));
+  top: calc(299.6 * var(--u));
+  width: calc(32 * var(--u));
+  height: calc(32 * var(--u));
+  transform: translate(-50%, -50%) rotate(45deg);
+  background: var(--ticket-ink);
+  -webkit-mask: url("assets/work/airplane.svg") no-repeat center / contain;
+  mask: url("assets/work/airplane.svg") no-repeat center / contain;
+}
+.ticket-tear { display: none; } /* desktop tears vertically, and the notches say so */
+.ticket-soon {
+  left: calc(16.5 * var(--u));
+  top: calc(15.6 * var(--u));
+  padding: calc(10 * var(--u)) calc(14 * var(--u));
+  border-radius: calc(6 * var(--u));
+  background: rgb(0 43 186 / 0.52);
+  color: #fff;
+  font-size: calc(20 * var(--u));
+  line-height: 1.2;
+}
 
 /* ---------- case study ---------- */
 /* column widens from 640 to 1160 on case study pages */
@@ -190,45 +317,35 @@ a { color: inherit; }
 /* if JS never runs, nothing should stay invisible */
 .no-js .reveal { opacity: 1; transform: none; }
 
-/* ---------- experience ---------- */
-.exp-rows { display: flex; flex-direction: column; gap: 24px; }
-.exp-row { display: flex; align-items: flex-start; gap: 8px; }
-.exp-date {
-  flex: none; width: 168px;
-  font-family: "Geist Mono", ui-monospace, monospace;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 16px;
-  color: var(--grey);
-}
-.exp-detail { flex: 1; display: flex; flex-direction: column; gap: 8px; }
-.exp-role { display: flex; align-items: center; gap: 6px; font-size: 18px; line-height: 21.6px; }
-.exp-role .dia { font-size: 14px; line-height: 20px; }
-.exp-desc { margin: 0; font-weight: 400; font-size: 16px; line-height: 19.2px; color: var(--grey); }
-
 /* ---------- about ---------- */
-.about-body { display: flex; flex-direction: column; gap: 28px; }
+.about-body { display: flex; flex-direction: column; gap: 40px; }
 .lead { margin: 0; font-size: 18px; line-height: 21.6px; }
 .paras { display: flex; flex-direction: column; gap: 20px; }
 .paras p { margin: 0; font-size: 20px; line-height: 24px; }
 
 /* ---------- most replayed ---------- */
-.replayed { display: flex; flex-direction: column; gap: 28px; }
+.replayed { display: flex; flex-direction: column; gap: 40px; }
 .replayed-label { font-size: 15px; line-height: 18px; padding: 6px 0 6px 6px; color: var(--grey); }
 /* Spotify compact embed — 80px is the short player, matching the reference's 81px bar */
 .track {
   display: block;
   width: 100%;
-  height: 80px;
+  height: 81px;
   border: 0;
   border-radius: 8px;
   color-scheme: normal; /* stops the iframe inheriting a forced dark scheme */
 }
 
-/* polaroids overlap and tilt; stage is fixed so they can bleed past the column */
+/* Polaroids overlap and tilt inside a fixed stage so they can bleed past it.
+   The design keeps them at their original size in the wider column and simply
+   re-centres them, and the tilts run the other way now: the left photo leans
+   clockwise, the right one back against it. */
 .polaroids { position: relative; height: 440px; }
 .polaroid {
   position: absolute;
+  /* a figure carries a default margin of 1em 40px, which would silently shift
+     every coordinate below by 40 across and 16 down */
+  margin: 0;
   background: #fff;
   border-radius: 2px;
   box-shadow: 0 4px 14px rgb(0 0 0 / 0.14);
@@ -243,9 +360,9 @@ a { color: inherit; }
   line-height: 16px;
   color: var(--grey);
 }
-.polaroid-1 { left: -13px; top: -9px; width: 357px; height: 429px; transform: rotate(-4deg); }
+.polaroid-1 { left: 76px; top: -1px; width: 357px; height: 429px; transform: rotate(4deg); }
 .polaroid-1 img { height: 339px; }
-.polaroid-2 { left: 328px; top: 12px; width: 311px; height: 375px; transform: rotate(3deg); }
+.polaroid-2 { left: 396px; top: 22px; width: 311px; height: 375px; transform: rotate(-3deg); }
 .polaroid-2 img { height: 297px; }
 
 /* ---------- footer ---------- */
@@ -257,7 +374,8 @@ a { color: inherit; }
   flex-direction: column;
   align-items: center;
 }
-.contact { width: var(--col); max-width: 100%; display: flex; flex-direction: column; align-items: center; gap: 31px; }
+/* the contact block is narrower than the page column in the design */
+.contact { width: 640px; max-width: 100%; display: flex; flex-direction: column; align-items: center; gap: 31px; }
 .contact h2 {
   margin: 0;
   align-self: stretch;
@@ -318,25 +436,82 @@ a { color: inherit; }
 /* ---------- mobile ---------- */
 @media (max-width: 680px) {
   :root { --col: 100%; }
-  .nav { gap: 8px; padding: 20px 16px; height: auto; }
-  .col { padding: 32px 16px 56px; gap: 40px; }
-  .tagline { width: 100%; gap: 14px; }
-  .tagline p { font-size: 16px; line-height: 19.2px; }
+  /* the tray tightens up rather than shrinking: items butt together, padding drops to 14 */
+  .nav { padding: 20px 16px; height: auto; }
+  .pills { gap: 0 0; row-gap: 8px; }
+  .pill { padding: 8px 14px; }
+  /* full bleed minus the 16px page padding, not the desktop 32px gutter */
+  .col { width: 100%; padding: 32px 16px 56px; gap: 40px; }
+  /* panels keep the 16px inline padding from .col and only tighten top and bottom */
+  .panel .col { padding-block: 40px; }
+  .panel--hero .col { padding-block: 32px 40px; }
   .head { height: auto; gap: 8px; }
   .head .label { font-size: 28px; line-height: 34px; }
   .head .dia { font-size: 18px; line-height: 22px; }
   .section { gap: 20px; }
-  .card { padding: 16px; }
-  .tag { font-size: 16px; line-height: 20px; padding: 8px 12px; top: 12px; left: 12px; }
-  .caption { font-size: 18px; line-height: 22px; }
+  .panel--work .section { gap: 64px; }
+  .panel--about .section { gap: 32px; }
 
-  /* date stacks above the role rather than sitting in a fixed left column */
-  .exp-row { flex-direction: column; gap: 16px; }
-  .exp-date { width: auto; }
-  .exp-rows { gap: 20px; }
+  /* the postcard is centred on the first screen rather than sitting under the nav */
+  .panel--hero { min-height: calc(100svh - 78px); align-items: center; }
+  .panel--hero .col { padding-block: 40px; }
 
-  .col--work { gap: 44px; padding-top: 24px; }
-  .page-title { font-size: 70px; }
+  /* ---------- mobile tickets ---------- */
+  /* Same content, different ticket: the card turns portrait, the artwork moves
+     from a side stub to a full width still, and the tear runs across it. */
+  .work-list { gap: 48px; }
+  .ticket-face {
+    aspect-ratio: 358 / 541;
+    border-radius: 8px;
+    /* the shape is 569 tall against a 541 card, so the drawn tail is cropped,
+       which is why this is sized by width and anchored to the top */
+    -webkit-mask: url("assets/work/ticket-mobile.svg") no-repeat top left / 100% auto;
+    mask: url("assets/work/ticket-mobile.svg") no-repeat top left / 100% auto;
+  }
+  .ticket-inner { --u: calc(100cqw / 358); }
+
+  .ticket-shot { left: 0; top: calc(58.5 * var(--u)); width: 100%; height: calc(275 * var(--u)); }
+  .ticket-route {
+    left: calc(16 * var(--u));
+    right: calc(16 * var(--u));
+    top: calc(16 * var(--u));
+    font-size: calc(24 * var(--u));
+  }
+  .ticket-title { left: calc(16 * var(--u)); top: calc(349 * var(--u)); font-size: calc(48 * var(--u)); }
+  .ticket-kind  { left: calc(16 * var(--u)); top: calc(411 * var(--u)); font-size: calc(16 * var(--u)); }
+  .ticket-kind-year { display: inline; } /* mobile folds the year into this line */
+  .ticket-year { display: none; }
+
+  .ticket-mascot--tomatoo  { left: calc(222.6 * var(--u)); top: calc(337.6 * var(--u)); width: calc(106.6 * var(--u)); }
+  .ticket-mascot--jopana   { left: calc(209 * var(--u));   top: calc(331 * var(--u));   width: calc(141.4 * var(--u)); }
+  .ticket-mascot--linktalk { left: calc(207 * var(--u));   top: calc(338 * var(--u));   width: calc(114 * var(--u)); }
+
+  /* the tear line runs between the two edge notches */
+  .ticket-tear {
+    display: block;
+    left: calc(25 * var(--u));
+    top: calc(463 * var(--u));
+    width: calc(308 * var(--u));
+    height: 1px;
+    background: repeating-linear-gradient(to right,
+      var(--ticket-ink) 0 calc(4 * var(--u)),
+      transparent calc(4 * var(--u)) calc(8 * var(--u)));
+  }
+  .ticket-barcode {
+    left: calc(29 * var(--u));
+    top: calc(477 * var(--u));
+    transform: rotate(180deg);
+    transform-origin: center;
+    font-size: calc(48 * var(--u));
+  }
+  .ticket-plane { display: none; }
+  .ticket-soon {
+    left: calc(16 * var(--u));
+    top: calc(74.4 * var(--u));
+    padding: calc(10 * var(--u)) calc(14 * var(--u));
+    border-radius: calc(6 * var(--u));
+    font-size: calc(20 * var(--u));
+  }
 
   /* case study: subheading stacks above the prose, meta stacks */
   .col--case { width: 100%; gap: 44px; padding: 40px 16px 56px; }
@@ -356,16 +531,18 @@ a { color: inherit; }
   .lead { font-size: 12px; line-height: 15px; }
   .paras { gap: 16px; }
   .paras p { font-size: 16px; line-height: 19.2px; }
-  .about-body { gap: 24px; }
+  .about-body { gap: 40px; }
+  .replayed { gap: 56px; }
 
   .replayed-label { font-size: 13px; line-height: 16px; }
 
+  /* same photos and tilts as desktop, re-placed for the narrower stage */
   .polaroids { height: 246px; }
   .polaroid { padding: 7px; }
   .polaroid figcaption { margin-top: 14px; font-size: 10px; line-height: 13px; }
-  .polaroid-1 { left: -7px; top: -5px; width: 200px; height: 240px; }
+  .polaroid-1 { left: 1px; top: 2px; width: 200px; height: 240px; }
   .polaroid-1 img { height: 190px; }
-  .polaroid-2 { left: 183px; top: 7px; width: 174px; height: 210px; }
+  .polaroid-2 { left: 188px; top: 11px; width: 174px; height: 210px; }
   .polaroid-2 img { height: 166px; }
 
   .footer { padding: 60px 16px 0; }
@@ -379,6 +556,13 @@ a { color: inherit; }
   .wordmark .copy { font-size: 14px; line-height: 17px; }
 }
 
+/* below 390 the tray no longer fits on one line, so buy the space back from padding
+   rather than letting Resume wrap onto a second row */
+@media (max-width: 400px) {
+  .nav { padding: 20px 12px; }
+  .pill { padding: 8px 12px; }
+}
+
 /* between mobile and 1160+, the case study column needs to shrink rather than overflow */
 @media (min-width: 681px) and (max-width: 1223px) {
   .col--case { width: 100%; padding-left: 32px; padding-right: 32px; }
@@ -389,4 +573,6 @@ a { color: inherit; }
   * { transition: none !important; }
   html { scroll-behavior: auto; }
   .reveal { opacity: 1; transform: none; }
+  /* sheets scroll past each other normally instead of pinning and stacking */
+  .panel { position: static; }
 }
