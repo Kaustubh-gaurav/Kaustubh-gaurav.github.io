@@ -1,0 +1,320 @@
+/* ---------- About, rebuilt from Frame 28 on Page 5 ----------
+
+   The finished About section is a composed piece rather than a flow of blocks:
+   an open notebook with a sticker collage on its lower page, a cassette holding
+   the track embed, two polaroids and a comic strip. Everything overlaps and
+   nothing reflows, so it is laid out the way the boarding pass cards are, in
+   design pixels against one container unit.
+
+   --u is 1/747 of the column, and 747 is the width of Frame 28, so every number
+   below is read straight off the Figma. The whole section scales as one piece.
+
+   Desktop only. The mobile frame in the file has not been redesigned, so below
+   681 this unstacks into ordinary blocks: see the bottom of the file. */
+
+/* Nothing here. The panel used to carry 520 underneath, which was the room the
+   aeroplane needed, and briefly 64 after the artwork came out. It now takes the
+   64 over 128 that .panel .col already gives every sheet, so the comic strip
+   ends 128 above the footer arriving over it, in step with the rest of the page.
+   The override is gone rather than restated, so there is one rhythm to change. */
+
+.about-stage {
+  container-type: inline-size;
+  position: relative;
+  width: 100%;
+}
+.about-inner {
+  --u: calc(100cqw / 747);
+  position: relative;
+  width: 100%;
+  /* Frame 28 is 2681 with 64 of padding top and bottom, which .col already
+     provides, so the stage itself is the 2553 between them. */
+  height: calc(2553 * var(--u));
+}
+
+.about-stage img { display: block; }
+/* the heading is artwork, but it still has to be the section's h2 */
+.ab-h2 { margin: 0; }
+/* the pair only needs to be a box on mobile; on desktop they place themselves
+   against the stage, so the wrapper gets out of the way entirely */
+.ab-pols { display: contents; }
+
+/* every piece is placed, so they share one rule */
+.ab {
+  position: absolute;
+  margin: 0;
+}
+
+/* ---------- the notebook ---------- */
+/* The photograph carries its own cream surround, the same #fffeea the panel is
+   now painted, so it composites with no visible edge. That is why the About
+   panel had to change colour along with this. */
+.ab-book {
+  left: calc(-2 * var(--u));
+  top: 0;
+  width: calc(749 * var(--u));
+  height: calc(1225 * var(--u));
+}
+
+/* Amsterdam Handwriting is a commercial face and cannot be served as a webfont,
+   so the heading ships as artwork with the words kept in the alt. Same trade the
+   postcard headline already makes. */
+.ab-head {
+  left: calc(47 * var(--u));
+  top: calc(179 * var(--u));
+  width: calc(225 * var(--u));
+  height: auto;
+}
+.ab-rule {
+  left: calc(273 * var(--u));
+  top: calc(217 * var(--u));
+  width: calc(385 * var(--u));
+  height: calc(2 * var(--u));
+  background: var(--blue);
+}
+.ab-plane {
+  left: calc(666 * var(--u));
+  top: calc(202 * var(--u));
+  width: calc(32 * var(--u));
+  height: calc(32 * var(--u));
+  fill: var(--blue);
+  /* drawn nose up, carries a -90 in the file, so it flies right along the rule */
+  transform: rotate(90deg);
+}
+
+.ab-copy {
+  left: calc(47 * var(--u));
+  top: calc(298 * var(--u));
+  width: calc(651 * var(--u));
+  font-family: "Indie Flower", cursive;
+  font-size: calc(24 * var(--u));
+  line-height: 1.5;
+  color: var(--blue);
+}
+.ab-copy p { margin: 0; }
+/* Figma holds this as one text block with a blank line between paragraphs, so
+   the gap is one line of the same measure. Left to flow rather than placed, the
+   break lands across the fold on its own. */
+.ab-copy p + p { margin-top: calc(36 * var(--u)); }
+
+/* the stickers sit on the lower page and overflow their frame in the Figma too,
+   so this is the union of them, placed where that union starts */
+.ab-collage {
+  left: calc(10 * var(--u));
+  top: calc(576 * var(--u));
+  width: calc(721 * var(--u));
+  height: calc(582 * var(--u));
+}
+
+/* ---------- the cassette ---------- */
+.ab-tape {
+  left: 0;
+  top: calc(1266 * var(--u));
+  width: calc(747 * var(--u));
+  height: calc(470 * var(--u));
+}
+/* a clean strip laid over the cassette's own printed label */
+.ab-label {
+  left: calc(52 * var(--u));
+  top: calc(1331 * var(--u));
+  width: calc(634 * var(--u));
+  height: calc(82 * var(--u));
+  background: #f9f8f9;
+}
+.ab-line {
+  left: calc(86 * var(--u));
+  top: calc(1334 * var(--u));
+  width: calc(565 * var(--u));
+  font-family: "Indie Flower", cursive;
+  font-size: calc(40 * var(--u));
+  line-height: 1.5;
+  color: #0f0f0f;
+  /* One line in the Figma, and it only just fits its 565 box, so browser metrics
+     are enough to tip it onto a second line and out of the white label. */
+  white-space: nowrap;
+}
+/* Built rather than embedded. Spotify's compact embed is locked at 80 tall no
+   matter what height the iframe is given, and the design's bar is 121, so the
+   real embed can never fill this box. It also insists on a Preview chip and its
+   own icons. This is the bar as drawn; the whole thing is a link to the track. */
+.ab-track {
+  left: calc(103 * var(--u));
+  top: calc(1416 * var(--u));
+  width: calc(532 * var(--u));
+  height: calc(121 * var(--u));
+  display: flex;
+  align-items: center;
+  gap: calc(12 * var(--u));
+  padding: 0 calc(16 * var(--u));
+  border-radius: calc(12 * var(--u));
+  background: #3d3b38;
+  text-decoration: none;
+  transition: background-color 200ms ease;
+}
+.ab-track:hover { background: #4a4844; }
+/* the embed is positioned against this */
+.ab-track { position: absolute; }
+
+/* Everything inside the bar comes off the mobile frame rather than the desktop
+   mock. The two are drawn at the same bar size once scaled, 256x58 against
+   532x121, but mobile fills it far better: art 67 against 52, play 58 against
+   28, name 29 against 14, artist 25 against 12. Since the desktop mock left all
+   that air, both widths now use the mobile proportions. */
+.ab-track-art {
+  width: calc(67 * var(--u));
+  height: calc(67 * var(--u));
+  border-radius: calc(8 * var(--u));
+  flex: none;
+}
+.ab-track-meta { display: flex; flex-direction: column; gap: calc(8 * var(--u)); min-width: 0; }
+.ab-track-name {
+  font-family: Inter, system-ui, sans-serif;
+  font-weight: 500;
+  font-size: calc(29 * var(--u));
+  line-height: calc(35 * var(--u));
+  color: #fff;
+}
+.ab-track-artist {
+  font-family: Inter, system-ui, sans-serif;
+  font-weight: 400;
+  font-size: calc(25 * var(--u));
+  line-height: calc(31 * var(--u));
+  color: #bfbfbd;
+}
+/* pushed to the right edge, as in the frame, and up from 28 to the mobile 58 */
+.ab-track-play {
+  margin-left: auto;
+  flex: none;
+  width: calc(58 * var(--u));
+  height: calc(58 * var(--u));
+  border-radius: 50%;
+  background: #fff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform 160ms ease;
+}
+.ab-track-play:hover, .ab-track-play:focus-visible { transform: scale(1.08); }
+.ab-track-ico {
+  grid-area: 1 / 1;
+  width: calc(24 * var(--u));
+  height: calc(24 * var(--u));
+  fill: #3d3b38;
+}
+/* both icons stack in the same cell and one is shown at a time, so the button
+   never changes size as it toggles */
+.ab-track-ico--pause { display: none; }
+.ab-track.is-playing .ab-track-ico--play { display: none; }
+.ab-track.is-playing .ab-track-ico--pause { display: block; }
+
+/* Spotify does the audio from back here. Kept at a real size and merely
+   transparent rather than display:none or 0x0, because a player with no box is
+   liable to be treated as not really present and never start. */
+.ab-track-embed {
+  position: absolute;
+  left: 0;
+  bottom: calc(-4 * var(--u));
+  width: calc(300 * var(--u));
+  height: calc(80 * var(--u));
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* ---------- polaroids ---------- */
+/* Positioned by their centres, because a rotated element's box in Figma is the
+   bounding box rather than the card, and the two do not share a corner. */
+.ab-pol {
+  background: #fff;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.18);
+}
+.ab-pol img { position: absolute; }
+.ab-pol figcaption {
+  position: absolute;
+  font-family: Inter, system-ui, sans-serif;
+  font-weight: 400;
+  font-size: calc(13 * var(--u));
+  line-height: calc(16 * var(--u));
+  color: #7e7e7e;
+  /* centred under the photo rather than ranged left, at both widths: the caption
+     boxes are set to the photo's width below, so this centres against the photo
+     and not against the whole card, which is wider on one side than the other */
+  text-align: center;
+}
+
+.ab-pol--1 {
+  left: calc(46.5 * var(--u));
+  top: calc(1812 * var(--u));
+  width: calc(357 * var(--u));
+  height: calc(429 * var(--u));
+  transform: rotate(-4deg);
+}
+.ab-pol--1 img {
+  left: calc(13 * var(--u)); top: calc(13 * var(--u));
+  width: calc(331 * var(--u)); height: calc(339 * var(--u));
+  object-fit: cover;
+}
+.ab-pol--1 figcaption { left: calc(13 * var(--u)); top: calc(366 * var(--u)); width: calc(331 * var(--u)); }
+
+.ab-pol--2 {
+  left: calc(396.5 * var(--u));
+  top: calc(1819 * var(--u));
+  width: calc(311 * var(--u));
+  height: calc(375 * var(--u));
+  transform: rotate(3deg);
+}
+.ab-pol--2 img {
+  left: calc(13 * var(--u)); top: calc(13 * var(--u));
+  width: calc(285 * var(--u)); height: calc(297 * var(--u));
+  object-fit: cover;
+}
+.ab-pol--2 figcaption { left: calc(13 * var(--u)); top: calc(328 * var(--u)); width: calc(285 * var(--u)); }
+
+/* ---------- the strip ---------- */
+.ab-strip {
+  left: 0;
+  top: calc(2317 * var(--u));
+  width: calc(747 * var(--u));
+  height: calc(236 * var(--u));
+}
+
+/* ---------- mobile ---------- */
+/* Frame 31 is drawn now, and it is the same composition at 358 rather than a
+   different layout. Checked rather than assumed: at 358/747 the notebook lands
+   on 358x586 against the frame's 358x586, the collage on 345x279 against
+   335x269, the heading on 108 wide against 109, and the cassette on 358x225
+   exactly. So nothing is repositioned here and the stage simply scales, which
+   is what --u was for.
+
+   The four blocks do sit further apart at this width. Those gaps are the only
+   difference, so they are the only thing restated, converted back into stage
+   units by dividing the frame's own offsets by 358/747:
+
+       cassette   634 -> 1323   (+57)
+       polaroids  907 -> 1893   (+93)
+       strip     1201 -> 2506  (+189)
+       height    1314 -> 2742  (+189)
+
+   The label, handwritten line and track bar are placed against the stage rather
+   than against the cassette, so each one carries the cassette's +57 as well. */
+@media (max-width: 680px) {
+  .about-inner { height: calc(2742 * var(--u)); }
+
+  /* The copy was rewritten at this width: 14px against the desktop 24, which is
+     29 in stage units, and the three paragraphs now run together as one block
+     rather than sitting apart. Inline is how three <p> become one flowing run
+     without keeping a second copy of the words in the markup for mobile. */
+  .ab-copy { font-size: calc(29 * var(--u)); }
+  .ab-copy p { display: inline; }
+  .ab-copy p + p { margin-top: 0; }
+
+  .ab-tape  { top: calc(1323 * var(--u)); }
+  .ab-label { top: calc(1388 * var(--u)); }
+  .ab-line  { top: calc(1391 * var(--u)); }
+  .ab-track { top: calc(1473 * var(--u)); }
+
+  .ab-pol--1 { top: calc(1905 * var(--u)); }
+  .ab-pol--2 { top: calc(1912 * var(--u)); }
+
+  .ab-strip { top: calc(2506 * var(--u)); }
+}

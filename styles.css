@@ -149,7 +149,21 @@ a { color: inherit; }
 .panel--work .section { gap: 80px; }
 .panel--about .section { gap: 56px; }
 .panel--work { background: url("assets/sky-panel.webp") center / cover no-repeat; }
-.panel--about { background: #e7e7e9; }
+/* Cream with a dot grid. Cream still matters on its own, because the notebook,
+   cassette and sticker photographs were shot against #fffeea; their surrounds
+   are keyed out now, so the dots run right up to their edges, but any leftover
+   fringe still wants the same colour behind it.
+
+   One radial gradient repeated on a 24 grid, rather than a tiled image: it stays
+   crisp at any zoom, costs no request, and the spacing and weight are two
+   numbers rather than a new export. The dots are the page blue at 12%, which is
+   the same ink the About copy is written in. */
+.panel--about {
+  background-color: #fffeea;
+  background-image: radial-gradient(circle, rgb(0 43 186 / 0.12) 1.6px, transparent 1.7px);
+  background-size: 24px 24px;
+  background-position: center;
+}
 .panel--footer { background: var(--blue); }
 
 /* Nothing comes over the footer, so it never pins. It still has to be positioned:
@@ -161,30 +175,89 @@ a { color: inherit; }
   scroll-margin-top: 86px;
 }
 
-/* Settles in on load like a card being put down on the desk. The fill is
-   backwards rather than both on purpose: both would leave the animation's end
-   state latched forever and the hover transform below would never apply. */
+/* The hero is two cards now, not one flat picture: the envelope lands first and
+   the postcard slides over it, the way someone would put it down.
+   Both artworks are level, so every angle here is CSS rather than baked in,
+   which is also what lets hover straighten the postcard against the envelope.
+
+   The fill is backwards rather than both on purpose: both would latch the end
+   state forever and the hover transform would never apply. */
+.postcard-wrap { position: relative; width: 100%; }
+
+.hero-envelope {
+  position: absolute;
+  left: 0;
+  top: 3.4%;
+  width: 100%;
+  height: auto;
+  /* tilted the other way from the postcard, so its corners read at the top left
+     and bottom right rather than hiding directly behind */
+  transform: rotate(3.4deg);
+  animation: envelope-in 620ms cubic-bezier(.22,.61,.36,1) backwards;
+}
+
 .postcard {
+  position: relative;
   width: 100%;
   height: auto;
   transform-origin: 50% 55%;
-  animation: postcard-settle 950ms cubic-bezier(.22,.61,.36,1) backwards;
+  transform: rotate(-3.08deg);
+  /* waits for the envelope to land before rising over it */
+  animation: postcard-slide 820ms cubic-bezier(.22,.61,.36,1) 260ms backwards;
   transition: transform 480ms cubic-bezier(.22,.61,.36,1);
 }
-@keyframes postcard-settle {
-  from { opacity: 0; transform: translateY(16px) scale(0.97) rotate(-1.4deg); }
-  to   { opacity: 1; transform: none; }
+
+/* Hover sits the postcard square. Triggered on the wrapper so it responds to the
+   card rather than to anywhere in the hero band, and does not chase the pointer
+   as it rotates. */
+.postcard-wrap:hover .postcard { transform: rotate(0deg) scale(1.01); }
+
+/* Both come up from below, the envelope first and the postcard after it, so the
+   postcard is seen arriving over an envelope that is already down.
+   translateY is written before rotate on purpose: after it, the card would
+   travel along its own tilted axis and drift sideways as it rises. */
+@keyframes envelope-in {
+  from { opacity: 0; transform: translateY(58%) rotate(3.4deg); }
+  to   { opacity: 1; transform: translateY(0) rotate(3.4deg); }
 }
-/* Hover straightens the postcard. It is drawn at about 3 degrees off level in
-   the artwork, and the design's hover state sits it upright at the same size.
-   Triggered on the wrapper, so it responds to the postcard rather than to
-   anywhere in the hero band, and does not chase the pointer as it rotates. */
-.postcard-wrap { width: 100%; }
-.postcard-wrap:hover .postcard { transform: rotate(3.08deg) scale(1.01); }
+@keyframes postcard-slide {
+  from { opacity: 0; transform: translateY(64%) rotate(-3.08deg); }
+  to   { opacity: 1; transform: translateY(0) rotate(-3.08deg); }
+}
 
 /* ---------- section header: rule + diamond + serif label ---------- */
 .section { display: flex; flex-direction: column; gap: 24px; }
 .head { display: flex; align-items: center; gap: 8px; height: 48px; }
+
+/* The desktop header is the handwritten wordmark, then the rule, then a plane.
+   Mobile still uses the rule, diamond and serif label, so both sets ship and the
+   breakpoint chooses. The wordmark is an SVG rather than a webfont because
+   Amsterdam Handwriting is a commercial face; the h2 carries the real text. */
+/* Both breakpoints now, not desktop only: the mobile header was redrawn to the
+   same pattern, wordmark then rule then plane, at 20px instead of 40.
+   The glyphs are 75 tall against a 48 header and overflow it in the Figma too.
+   .head has a fixed height, so an over-tall flex item centres and spills without
+   pushing the section down. */
+.head-art { display: block; flex: none; width: 110px; height: auto; }
+.head-plane {
+  display: block;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  fill: var(--blue);
+  /* the group is drawn nose up and rotated -90 in the file, so it flies right */
+  transform: rotate(90deg);
+}
+.head .dia { display: none; }
+/* kept for structure and screen readers, since the visible one is artwork */
+.head .label {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
 .head .rule { flex: 1; height: 2px; background: var(--blue); }
 .head .dia { font-size: 24px; line-height: 28.8px; }
 .head .label {
@@ -548,20 +621,24 @@ a { color: inherit; }
 .socials svg { height: 32px; width: auto; fill: #fff; display: block; }
 .socials a:hover, .socials a:focus-visible { opacity: 0.7; }
 
-/* The wordmark is set on line-height 1, so the font's descent space spills below
-   the box it occupies. Nothing is drawn down there, but it still counts as page
-   height, which left a strip of page background showing under the footer. Clip
-   removes it from scrollable overflow without creating a scroll container. */
-.wordmark { width: 100%; padding-top: 60px; text-align: center; overflow: clip; }
+/* The wordmark is artwork now, not type. It is set in Amsterdam Handwriting,
+   which is a commercial face and cannot be served as a webfont, and it carries a
+   gradient from solid white down to 10% that no font can do on its own. SVG
+   holds both, stays sharp at any size, and keeps the real words in the alt.
+
+   Overflow is still clipped: the glyphs have long descenders and the block is
+   the last thing on the page, so anything spilling below counted as page height
+   and showed a strip of page background under the footer. */
+.wordmark { width: 100%; padding-top: 45px; text-align: center; overflow: clip; }
 .wordmark .mark {
-  font-family: "Instrument Serif", Georgia, serif;
-  font-weight: 400;
-  font-size: clamp(48px, 16.6vw, 318px);
-  line-height: 1;
-  margin: 0;
-  white-space: nowrap;
+  display: block;
+  /* 789 is the drawn width of the glyphs, centred in the 1440 the design gives
+     them; it gives way to the viewport before it would overflow a narrow one */
+  width: min(789px, 92%);
+  height: auto;
+  margin: 0 auto;
 }
-.wordmark .copy { font-size: 16px; line-height: 19.2px; margin: 0; }
+.wordmark .copy { font-size: 16px; line-height: 19.2px; margin: 26px 0 0; }
 
 /* ---------- mobile ---------- */
 @media (max-width: 680px) {
@@ -576,9 +653,12 @@ a { color: inherit; }
      64 over 128 rhythm here as on desktop */
   .panel .col { padding-block: 64px 128px; }
   .panel--hero .col { padding-block: 32px 40px; }
-  .head { height: auto; gap: 8px; }
-  .head .label { font-size: 28px; line-height: 34px; }
-  .head .dia { font-size: 18px; line-height: 22px; }
+  /* the header keeps its 48 here, the pieces just come down: wordmark 55 wide
+     against the desktop 110, plane 24 against 32, and a hairline rule */
+  .head { height: 48px; gap: 8px; }
+  .head-art { width: 57px; }
+  .head-plane { width: 24px; height: 24px; }
+  .head .rule { height: 1px; }
   .section { gap: 20px; }
   .panel--work .section { gap: 64px; }
   .panel--about .section { gap: 32px; }
